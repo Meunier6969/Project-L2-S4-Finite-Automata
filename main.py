@@ -1,9 +1,8 @@
-from automata import Automata
+from automata import Automata, parseAutomataFromFile
 
 def main():
-	auto = Automata(2, 5, [0], [4])
-	auto.transitions[0][0] = (1,2)
-	auto.displayTransition()
+	auto = parseAutomataFromFile("machines/test_automata.txt")
+	auto.display()
 
 if __name__=="__main__":
 	main()
