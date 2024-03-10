@@ -9,7 +9,7 @@ class Automata:
 	transitions: list[dict] = [{}]
 
 	def __init__(self, sym: int, sta: int, i_sta: list[int], f_sta: list[int]) -> None:
-		print(f"Initializing Automata : {self}...")
+		# print(f"Initializing Automata : {self}...")
 		self.symbols = self.initSymbols(sym)
 		self.states = sta
 		self.initial_state = i_sta
@@ -22,8 +22,21 @@ class Automata:
 	def initTransitions(self) -> list[dict]:
 		return [{C:[] for C in self.symbols} for _ in range(self.states)]
 
-	def addTransition(self) -> None:
-		pass
+	def addTransition(self, state: int, symbol: str, transition: int) -> None:
+		if symbol not in self.symbols:
+			print(f"Symbol {symbol} not in FA.")
+			return
+
+		if state >= self.states or state < 0:
+			print(f"State {state} is not in FA.")
+			return
+
+		if transition >= self.states or transition < 0:
+			print(f"Transition {transition} is not in FA.")
+			return
+
+		if transition not in self.transitions[state][symbol]:
+			self.transitions[state][symbol].append(transition)
 
 	def displayTransition(self) -> None:
 		# Top row
@@ -45,8 +58,8 @@ class Automata:
 	def display(self) -> None:
 		print("Symbols : ", *self.symbols)
 		print("States : ", self.states)
-		print("Initial States : ", self.initial_state)
-		print("Final States : ", self.final_state)
+		print("Initial State(s) : ", self.initial_state)
+		print("Final State(s) : ", self.final_state)
 		print("Transitions : ")
 		self.displayTransition()
 
