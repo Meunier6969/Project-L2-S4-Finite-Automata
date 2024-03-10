@@ -89,7 +89,18 @@ def parseAutomataFromFile(path: str) -> Automata:
 	fista = [int(x) for x in fista]
 	fista.pop(0)
 
-	# Number of transitions
-	# Transitions
+	newAutomata =  Automata(nosym, nosta, insta, fista)
 
-	return Automata(nosym, nosta, insta, fista)
+	# Number of transitions
+	file.readline() # We can ignore this line
+
+	# Transitions
+	transitions = file.readlines()
+	# transitions = [trans.removesuffix('\n') for trans in transitions]
+
+	# Assuming state, character and transition is one character each
+	for trans in transitions:
+		newAutomata.addTransition(int(trans[0]), trans[1], int(trans[2]))
+		
+	return newAutomata
+
