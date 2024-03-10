@@ -5,19 +5,25 @@ class Automata:
 	states: int = 0
 	initial_state: list[int] = []
 	final_state: list[int] = []
-	# [State][Symbol] -> Transition (Null or tuple)
-	transitions: list[list[Optional[tuple]]] = [[]]
+	# [State]['Symbol'] -> [Transition]
+	transitions: list[dict] = [{}]
 
 	def __init__(self, sym: int, sta: int, i_sta: list[int], f_sta: list[int]) -> None:
 		print(f"Initializing Automata : {self}...")
-		self.symbols = self.setSymbols(sym)
+		self.symbols = self.initSymbols(sym)
 		self.states = sta
 		self.initial_state = i_sta
 		self.final_state = f_sta
-		self.transitions = [[None for _ in range(len(self.symbols))] for _ in range(self.states)]
+		self.transitions = self.initTransitions()
 
-	def setSymbols(self, numberOfSymbol: int) -> list[str]:
+	def initSymbols(self, numberOfSymbol: int) -> list[str]:
 		return [chr(i+97) for i in range(numberOfSymbol)]
+
+	def initTransitions(self) -> list[dict]:
+		return [{C:[] for C in self.symbols} for _ in range(self.states)]
+
+	def addTransition(self) -> None:
+		pass
 
 	def displayTransition(self) -> None:
 		# Top row
@@ -29,11 +35,11 @@ class Automata:
 		# Main table
 		for i, state in enumerate(self.transitions):
 			print(f"{i:<10}", end="")
-			for trans in state:
-				if trans == None:
+			for sym in self.symbols:
+				if state.get(sym) in [None,[]]:
 					print(f"{'--':<10}", end="")
 				else:
-					print(f"{str(trans):<10}", end="")
+					print(f"{str( state.get(sym) ):<10}", end="")
 			print()
 
 	def display(self) -> None:
