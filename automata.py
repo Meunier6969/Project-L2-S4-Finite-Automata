@@ -63,6 +63,38 @@ class Automata:
 		print("Transitions : ")
 		self.displayTransition()
 
+	def isDeterministic(self) -> bool:
+		pass
+
+	def isComplete(self) -> bool:
+		pass
+
+	def completion(self) -> Automata:
+		if self.isComplete():
+			return self
+		pass
+
+	def determinization(self) -> Automata:
+		if self.isDeterministic():
+			return self
+		pass 
+
+	def determinizationAndCompletion(self) -> Automata:
+		if self.isDeterministic() and self.isComplete():
+			return self
+
+		cdfa = self
+
+		if not cdfa.isDeterministic():
+			cdfa = cdfa.determinization()
+
+		if not cdfa.isComplete():
+			cdfa = cdfa.completion()
+
+		return cdfa
+
+
+
 
 def parseAutomataFromFile(path: str) -> Automata:
 	try:
