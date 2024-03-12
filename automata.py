@@ -63,23 +63,33 @@ class Automata:
 		print("Transitions : ")
 		self.displayTransition()
 
-	def isDeterministic(self) -> bool:
-		pass
+	def isDeterministic(self, verbose:bool = False) -> bool:
+		if len(self.initial_state) != 1:
+			if verbose: print(f"FA contains multiples initial states : {self.initial_state}")
+			return False
+
+		for i, state in enumerate(self.transitions):
+			for symbol in self.symbols:
+				if len(state.get(symbol)) > 1:
+					if verbose: print(f"State {i} has multiple transitions with symbol '{symbol}' : {state.get(symbol)}")
+					return False
+
+		return True
 
 	def isComplete(self) -> bool:
-		pass
+		return False
 
-	def completion(self) -> Automata:
+	def completion(self) -> "Automata":
 		if self.isComplete():
 			return self
 		pass
 
-	def determinization(self) -> Automata:
+	def determinization(self) -> "Automata":
 		if self.isDeterministic():
 			return self
 		pass 
 
-	def determinizationAndCompletion(self) -> Automata:
+	def determinizationAndCompletion(self) -> "Automata":
 		if self.isDeterministic() and self.isComplete():
 			return self
 
