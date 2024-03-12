@@ -65,19 +65,31 @@ class Automata:
 
 	def isDeterministic(self, verbose:bool = False) -> bool:
 		if len(self.initial_state) != 1:
-			if verbose: print(f"FA contains multiples initial states : {self.initial_state}")
+			if verbose: print(f"FA is not deterministic :\nFA contains multiples initial states : {self.initial_state}")
 			return False
 
 		for i, state in enumerate(self.transitions):
 			for symbol in self.symbols:
 				if len(state.get(symbol)) > 1:
-					if verbose: print(f"State {i} has multiple transitions with symbol '{symbol}' : {state.get(symbol)}")
+					if verbose: print(f"FA is not deterministic :\nState {i} has multiple transitions with symbol '{symbol}' : {state.get(symbol)}")
 					return False
 
+		print("FA is deterministic")
 		return True
 
-	def isComplete(self) -> bool:
-		return False
+	def isComplete(self, verbose:bool = False) -> bool:
+		if not self.isDeterministic(verbose=True):
+			if verbose: print("FA is not complete")
+			return False
+
+		for i, state in enumerate(self.transitions):
+			for symbol in self.symbols:
+				if len(state.get(symbol)) == 0:
+					if verbose: print(f"FA is not complete :\nState {i} has either no transitions with symbol '{symbol}' : {state.get(symbol)}")
+					return False
+
+		print("FA is complete")
+		return True
 
 	def completion(self) -> "Automata":
 		if self.isComplete():
