@@ -63,6 +63,23 @@ class Automata:
 		print("Transitions : ")
 		self.displayTransition()
 
+	def isStandard(self, verbose:bool = False) -> bool:
+		if len(self.initial_state) != 1:
+			if verbose: print(f"FA is not standard :\nFA contains multiples initial states : {self.initial_state}")
+			return False
+
+		initState = self.initial_state[0]
+
+		for i, state in enumerate(self.transitions):
+			for symbol in self.symbols:
+				if initState in state.get(symbol):
+					print(">:(")
+					return False
+
+		print("O:)")
+		return True
+
+
 	def isDeterministic(self, verbose:bool = False) -> bool:
 		if len(self.initial_state) != 1:
 			if verbose: print(f"FA is not deterministic :\nFA contains multiples initial states : {self.initial_state}")
@@ -74,7 +91,7 @@ class Automata:
 					if verbose: print(f"FA is not deterministic :\nState {i} has multiple transitions with symbol '{symbol}' : {state.get(symbol)}")
 					return False
 
-		print("FA is deterministic")
+		if verbose: print("FA is deterministic")
 		return True
 
 	def isComplete(self, verbose:bool = False) -> bool:
@@ -88,8 +105,13 @@ class Automata:
 					if verbose: print(f"FA is not complete :\nState {i} has either no transitions with symbol '{symbol}' : {state.get(symbol)}")
 					return False
 
-		print("FA is complete")
+		if verbose: print("FA is complete")
 		return True
+
+	def standardize(self) -> "Automata":
+		if self.isStandard():
+			return self
+		pass
 
 	def completion(self) -> "Automata":
 		if self.isComplete():
@@ -114,8 +136,6 @@ class Automata:
 			cdfa = cdfa.completion()
 
 		return cdfa
-
-
 
 
 def parseAutomataFromFile(path: str) -> Automata:
