@@ -7,7 +7,7 @@ class Automata:
 	final_state: list[int] = []
 	# [State]['Symbol'] -> [Transition]
 	transitions: list[dict] = [{}]
-
+		
 	def __init__(self, sym: int, sta: int, i_sta: list[int], f_sta: list[int]) -> None:
 		# print(f"Initializing Automata : {self}...")
 		self.symbols = self.initSymbols(sym)
@@ -73,10 +73,10 @@ class Automata:
 		for i, state in enumerate(self.transitions):
 			for symbol in self.symbols:
 				if initState in state.get(symbol):
-					print(">:(")
+					if verbose: print(f"FA is not standard :\nFA goes back to initial state : {state} -> {self.initial_state}")
 					return False
 
-		print("O:)")
+		if verbose: print("FA is standard")
 		return True
 
 
@@ -111,7 +111,16 @@ class Automata:
 	def standardize(self) -> "Automata":
 		if self.isStandard():
 			return self
-		pass
+
+		newAutomata = Automata(
+			len(self.symbols), 
+			self.states + 1,
+			[self.states],
+			self.final_state
+		)
+
+		newAutomata.display()
+
 
 	def completion(self) -> "Automata":
 		if self.isComplete():
