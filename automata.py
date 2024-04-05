@@ -47,7 +47,12 @@ class Automata:
 
 		# Main table
 		for i, state in enumerate(self.transitions):
-			print(f"{i:<10}", end="")
+			if i in self.initial_state :
+				print("->",f"{i:<10}", end="")
+			elif i in self.final_state :
+				print("<-",f"{i:<10}", end="")
+			else :
+				print("  ",f"{i:<10}", end="")
 			for sym in self.symbols:
 				if state.get(sym) in [None,[]]:
 					print(f"{'--':<10}", end="")
