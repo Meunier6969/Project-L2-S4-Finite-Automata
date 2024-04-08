@@ -50,7 +50,9 @@ class Automata:
 
 		# Main table
 		for state, transition in self.transitions.items():
-			if state in self.initial_state :
+			if state in self.initial_state and state in self.final_state :
+				print("<>",f"{state:<10}", end="")
+			elif state in self.initial_state :
 				print("->",f"{state:<10}", end="")
 			elif state in self.final_state :
 				print("<-",f"{state:<10}", end="")
@@ -71,6 +73,7 @@ class Automata:
 		print("Final State(s) : ", self.final_state)
 		print("Transitions : ")
 		self.displayTransition()
+
 
 	def isStandard(self, verbose:bool = False) -> bool:
 		if len(self.initial_state) != 1:
@@ -115,21 +118,8 @@ class Automata:
 
 		if verbose: print("FA is complete")
 		return True
-	
-	def complementary(self) -> "Automata":
-		
-		newAutomata = Automata(
-			len(self.symbols), 
-			self.states + 1,
-			[self.states],
-			self.final_state
-		)
-		# ini: list[int] = []
-		# for i, state in enumerate(self.initial_state):
-		pass
-		
 
-	def standardize(self) -> "Automata":
+	def standardization(self) -> "Automata":
 		if self.isStandard():
 			return self
 
@@ -141,6 +131,11 @@ class Automata:
 		)
 
 		newAutomata.display()
+
+	def determinization(self) -> "Automata":
+		if self.isDeterministic():
+			return self
+		pass 
 
 	def completion(self) -> "Automata":
 		if self.isComplete():
@@ -154,11 +149,6 @@ class Automata:
 				# si rien -> poubelle
 		
 		# return
-
-	def determinization(self) -> "Automata":
-		if self.isDeterministic():
-			return self
-		pass 
 
 	def determinizationAndCompletion(self) -> "Automata":
 		if self.isDeterministic() and self.isComplete():
@@ -174,6 +164,20 @@ class Automata:
 
 		return cdfa
 
+
+	def complementary(self) -> "Automata":
+		complementaryAutomata = Automata(
+			len(self.symbols), 
+			len(self.states),
+			self.initial_state,
+			# self.states - self.final_state
+			[state for state in self.states if state not in self.final_state]
+		)
+
+		complementaryAutomata.transitions = self.transitions
+
+		return complementaryAutomata
+		
 
 def parseAutomataFromFile(path: str) -> Automata:
 	try:
