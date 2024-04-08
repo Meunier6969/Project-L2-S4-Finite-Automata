@@ -8,13 +8,14 @@ def main():
 	# auto: Automata = parseAutomataFromFile("machines/standard_automata.txt")
 
 	auto = Automata(3, 5, [0], [1,2])
-	auto.transitions[2]['b'] = [69]
+	# auto.transitions[2]['b'] = [69]
+
+	print(auto.transitions)
 
 	auto.display()
 	# auto.isComplete(verbose=True)
-	auto.isStandard(verbose=True)
+	# auto.isStandard(verbose=True)
 
-	newAutomata = auto.completion()
 
 if __name__=="__main__":
 	main()

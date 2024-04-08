@@ -6,7 +6,7 @@ class Automata:
 	initial_state: list[int] = []
 	final_state: list[int] = []
 	# [State]['Symbol'] -> [Transition]
-	transitions: list[dict] = [{}]
+	transitions: dict[dict[list]] = {}
 		
 	def __init__(self, sym: int, sta: int, i_sta: list[int], f_sta: list[int]) -> None:
 		# print(f"Initializing Automata : {self}...")
@@ -19,8 +19,8 @@ class Automata:
 	def initSymbols(self, numberOfSymbol: int) -> list[str]:
 		return [chr(i+97) for i in range(numberOfSymbol)]
 
-	def initTransitions(self) -> list[dict]:
-		return [{C:[] for C in self.symbols} for _ in range(self.states)]
+	def initTransitions(self) -> dict[dict[list]]:
+		return {str(i):{C:[] for C in self.symbols} for i in range(self.states)}
 
 	def addTransition(self, state: int, symbol: str, transition: int) -> None:
 		if symbol not in self.symbols:
@@ -46,18 +46,19 @@ class Automata:
 		print()
 
 		# Main table
-		for i, state in enumerate(self.transitions):
-			if i in self.initial_state :
-				print("->",f"{i:<10}", end="")
-			elif i in self.final_state :
-				print("<-",f"{i:<10}", end="")
+		for state, transition in self.transitions.items():
+			if state in self.initial_state :
+				print("->",f"{state:<10}", end="")
+			elif state in self.final_state :
+				print("<-",f"{state:<10}", end="")
 			else :
-				print("  ",f"{i:<10}", end="")
+				print("  ",f"{state:<10}", end="")
+
 			for sym in self.symbols:
-				if state.get(sym) in [None,[]]:
+				if transition.get(sym) in [None,[]]:
 					print(f"{'--':<10}", end="")
 				else:
-					print(f"{str( state.get(sym) ):<10}", end="")
+					print(f"{str( transition.get(sym) ):<10}", end="")
 			print()
 
 	def display(self) -> None:
@@ -138,7 +139,7 @@ class Automata:
 				# si rien -> poubelle
 		
 		# return
-		
+
 	def determinization(self) -> "Automata":
 		if self.isDeterministic():
 			return self
