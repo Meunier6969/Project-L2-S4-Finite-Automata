@@ -40,7 +40,7 @@ class Automata:
 
 	def displayTransition(self) -> None:
 		# Top row
-		print(f"{' ':10}", end="")
+		print(f"{' ':14}", end="")
 		for char in self.symbols:
 			print(f"{char:10}", end="")
 		print()
@@ -113,6 +113,19 @@ class Automata:
 
 		if verbose: print("FA is complete")
 		return True
+	
+	def complementary(self) -> "Automata":
+		
+		newAutomata = Automata(
+			len(self.symbols), 
+			self.states + 1,
+			[self.states],
+			self.final_state
+		)
+		# ini: list[int] = []
+		# for i, state in enumerate(self.initial_state):
+		pass
+		
 
 	def standardize(self) -> "Automata":
 		if self.isStandard():
