@@ -79,39 +79,38 @@ class Automata:
 
 		initState = self.initial_state[0]
 
-		for i, state in enumerate(self.transitions):
+		for state, transition in self.transitions.items():
 			for symbol in self.symbols:
-				if initState in state.get(symbol):
+				if initState in transition[symbol]:
 					if verbose: print(f"FA is not standard :\nFA goes back to initial state : {state} -> {self.initial_state}")
 					return False
 
 		if verbose: print("FA is standard")
 		return True
 
-
 	def isDeterministic(self, verbose:bool = False) -> bool:
 		if len(self.initial_state) != 1:
 			if verbose: print(f"FA is not deterministic :\nFA contains multiples initial states : {self.initial_state}")
 			return False
 
-		for i, state in enumerate(self.transitions):
+		for state, transition in self.transitions.items():
 			for symbol in self.symbols:
-				if len(state.get(symbol)) > 1:
-					if verbose: print(f"FA is not deterministic :\nState {i} has multiple transitions with symbol '{symbol}' : {state.get(symbol)}")
+				if len(transition[symbol]) > 1:
+					if verbose: print(f"FA is not deterministic :\nState {state} has multiple transitions with symbol '{symbol}' : {transition.get(symbol)}")
 					return False
 
 		if verbose: print("FA is deterministic")
 		return True
 
 	def isComplete(self, verbose:bool = False) -> bool:
-		if not self.isDeterministic(verbose=True):
+		if not self.isDeterministic(verbose):
 			if verbose: print("FA is not complete")
 			return False
 
-		for i, state in enumerate(self.transitions):
+		for state, transition in self.transitions.items():
 			for symbol in self.symbols:
-				if len(state.get(symbol)) == 0:
-					if verbose: print(f"FA is not complete :\nState {i} has either no transitions with symbol '{symbol}' : {state.get(symbol)}")
+				if len(transition[symbol]) == 0:
+					if verbose: print(f"FA is not complete :\nState {state} has no transitions with symbol '{symbol}'")
 					return False
 
 		if verbose: print("FA is complete")
@@ -194,10 +193,12 @@ def parseAutomataFromFile(path: str) -> Automata:
 	# Initial states
 	insta = file.readline().split(' ')
 	insta.pop(0)
+	insta[-1] = insta[-1].removesuffix('\n')
 
 	# Final states
 	fista = file.readline().split(' ')
 	fista.pop(0)
+	fista[-1] = fista[-1].removesuffix('\n')
 
 	newAutomata =  Automata(nosym, nosta, insta, fista)
 

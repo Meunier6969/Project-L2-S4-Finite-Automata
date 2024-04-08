@@ -13,8 +13,9 @@ def main():
 	# print(auto.states)
 
 	auto.display()
-	# auto.isComplete(verbose=True)
 	# auto.isStandard(verbose=True)
+	# auto.isDeterministic(verbose=True)
+	auto.isComplete(verbose=True)
 
 
 if __name__=="__main__":
