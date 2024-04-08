@@ -126,12 +126,19 @@ class Automata:
 
 		newAutomata.display()
 
-
 	def completion(self) -> "Automata":
 		if self.isComplete():
 			return self
-		pass
+		
+		# créer nouveau automate state "poubelle"
 
+		for i, state in enumerate(self.transitions):
+			for symbol in self.symbols:
+				pass
+				# si rien -> poubelle
+		
+		# return
+		
 	def determinization(self) -> "Automata":
 		if self.isDeterministic():
 			return self
