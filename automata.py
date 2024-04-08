@@ -2,16 +2,16 @@ from typing import Optional
 
 class Automata:
 	symbols: list[str] = []
-	states: int = 0
-	initial_state: list[int] = []
-	final_state: list[int] = []
+	states: list[str] = []
+	initial_state: list[str] = []
+	final_state: list[str] = []
 	# [State]['Symbol'] -> [Transition]
 	transitions: dict[dict[list]] = {}
 		
-	def __init__(self, sym: int, sta: int, i_sta: list[int], f_sta: list[int]) -> None:
+	def __init__(self, sym: int, sta: int, i_sta: list[str], f_sta: list[str]) -> None:
 		# print(f"Initializing Automata : {self}...")
 		self.symbols = self.initSymbols(sym)
-		self.states = sta
+		self.states = self.initState(sta)
 		self.initial_state = i_sta
 		self.final_state = f_sta
 		self.transitions = self.initTransitions()
@@ -19,19 +19,22 @@ class Automata:
 	def initSymbols(self, numberOfSymbol: int) -> list[str]:
 		return [chr(i+97) for i in range(numberOfSymbol)]
 
-	def initTransitions(self) -> dict[dict[list]]:
-		return {str(i):{C:[] for C in self.symbols} for i in range(self.states)}
+	def initState(self, numberOfState: int) -> list[str]:
+		return [str(i) for i in range(numberOfState)]
 
-	def addTransition(self, state: int, symbol: str, transition: int) -> None:
+	def initTransitions(self) -> dict[dict[list]]:
+		return {state:{C:[] for C in self.symbols} for state in self.states}
+
+	def addTransition(self, state: str, symbol: str, transition: str) -> None:
 		if symbol not in self.symbols:
 			print(f"Symbol {symbol} not in FA.")
 			return
 
-		if state >= self.states or state < 0:
+		if state not in self.states:
 			print(f"State {state} is not in FA.")
 			return
 
-		if transition >= self.states or transition < 0:
+		if transition not in self.states:
 			print(f"Transition {transition} is not in FA.")
 			return
 
@@ -190,12 +193,10 @@ def parseAutomataFromFile(path: str) -> Automata:
 	
 	# Initial states
 	insta = file.readline().split(' ')
-	insta = [int(x) for x in insta]
 	insta.pop(0)
 
 	# Final states
 	fista = file.readline().split(' ')
-	fista = [int(x) for x in fista]
 	fista.pop(0)
 
 	newAutomata =  Automata(nosym, nosta, insta, fista)
@@ -209,7 +210,7 @@ def parseAutomataFromFile(path: str) -> Automata:
 
 	# Assuming state, character and transition is one character each
 	for trans in transitions:
-		newAutomata.addTransition(int(trans[0]), trans[1], int(trans[2]))
+		newAutomata.addTransition(trans[0], trans[1], trans[2])
 		
 	return newAutomata
 
