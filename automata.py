@@ -208,6 +208,7 @@ def parseAutomataFromFile(path: str) -> Automata:
 	transitions = file.readlines()
 	# transitions = [trans.removesuffix('\n') for trans in transitions]
 
+	# TODO: fix svp
 	# Assuming state, character and transition is one character each
 	for trans in transitions:
 		newAutomata.addTransition(trans[0], trans[1], trans[2])
