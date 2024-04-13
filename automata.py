@@ -18,18 +18,6 @@ class Automata:
 		self.final_state = f_sta
 		self.transitions = self.initTransitions()
 
-	def copyAutomata(originalAuto: Automata) -> Automata:
-		newAutomata = Automata(
-			len(originalAuto.symbols),
-			len(originalAuto.states),
-			deepcopy(originalAuto.initial_state),
-			deepcopy(originalAuto.final_state)
-		)
-
-		newAutomata.transitions = deepcopy(originalAuto.transitions)
-
-		return newAutomata
-
 	def initSymbols(self, numberOfSymbol: int) -> list[str]:
 		return [chr(i+97) for i in range(numberOfSymbol)]
 
@@ -137,10 +125,17 @@ class Automata:
 		if self.isStandard():
 			return self
 
+		standardized = Automata(
+			len(self.symbols),
+			len(self.states) + 1,
+			["I"],
+			deepcopy(self.final_state)
+		)
 
+		standardized.states[-1] = "I"
+		standardized.transitions = standardized.initTransitions() # Add "I" to the list of transition, might be better to add a function to do that
 
-
-		newAutomata.display()
+		return standardized
 
 	def determinization(self) -> "Automata":
 		if self.isDeterministic():

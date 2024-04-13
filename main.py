@@ -9,7 +9,7 @@ def main():
 
 	auto.display()
 
-	newAuto = auto.complementary()
+	newAuto = auto.standardization()
 
 	print("=== NEW AUTO ===")
 	newAuto.display()
