@@ -1,5 +1,6 @@
 from re import split as regexSplit
 from typing import Optional
+from copy import deepcopy
 
 class Automata:
 	symbols: list[str] = []
@@ -16,6 +17,18 @@ class Automata:
 		self.initial_state = i_sta
 		self.final_state = f_sta
 		self.transitions = self.initTransitions()
+
+	def copyAutomata(originalAuto: Automata) -> Automata:
+		newAutomata = Automata(
+			len(originalAuto.symbols),
+			len(originalAuto.states),
+			deepcopy(originalAuto.initial_state),
+			deepcopy(originalAuto.final_state)
+		)
+
+		newAutomata.transitions = deepcopy(originalAuto.transitions)
+
+		return newAutomata
 
 	def initSymbols(self, numberOfSymbol: int) -> list[str]:
 		return [chr(i+97) for i in range(numberOfSymbol)]
@@ -124,12 +137,8 @@ class Automata:
 		if self.isStandard():
 			return self
 
-		newAutomata = Automata(
-			len(self.symbols), 
-			self.states + 1,
-			[self.states],
-			self.final_state
-		)
+
+
 
 		newAutomata.display()
 
