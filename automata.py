@@ -43,6 +43,9 @@ class Automata:
 		if transition not in self.transitions[state][symbol]:
 			self.transitions[state][symbol].append(transition)
 
+	def addNewState(self, newState) -> None:
+		pass
+
 	def displayTransition(self) -> None:
 		# Top row
 		print(f"{' ':14}", end="")
