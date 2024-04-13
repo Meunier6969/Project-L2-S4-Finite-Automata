@@ -1,3 +1,4 @@
+from re import split as regexSplit
 from typing import Optional
 
 class Automata:
@@ -177,7 +178,7 @@ class Automata:
 		complementaryAutomata.transitions = self.transitions
 
 		return complementaryAutomata
-		
+
 
 def parseAutomataFromFile(path: str) -> Automata:
 	try:
@@ -213,10 +214,9 @@ def parseAutomataFromFile(path: str) -> Automata:
 	transitions = file.readlines()
 	# transitions = [trans.removesuffix('\n') for trans in transitions]
 
-	# TODO: fix svp
 	# Assuming state, character and transition is one character each
 	for trans in transitions:
+		trans = regexSplit("(\d+)", trans)[1:]
 		newAutomata.addTransition(trans[0], trans[1], trans[2])
 		
 	return newAutomata
-
