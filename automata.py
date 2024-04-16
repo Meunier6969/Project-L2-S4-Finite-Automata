@@ -43,8 +43,9 @@ class Automata:
 		if transition not in self.transitions[state][symbol]:
 			self.transitions[state][symbol].append(transition)
 
-	def addNewState(self, newState) -> None:
-		pass
+	def addNewState(self, newState: str) -> None:
+		self.states.append(newState)
+		self.transitions.update({newState:{C:[] for C in self.symbols}})
 
 	def displayTransition(self) -> None:
 		# Top row
@@ -164,17 +165,23 @@ class Automata:
 			self.final_state
 		)
 
-		completeAutomata.states.append("P")
+		# completeAutomata.states.append("P")
 
-		completeAutomata.transitions["P"] = {symbol: ["P"] for symbol in completeAutomata.symbols}
+		# completeAutomata.transitions["P"] = {symbol: ["P"] for symbol in completeAutomata.symbols}
 
-		completeAutomata.transitions.update({state: {symbol: transitions.copy() for symbol, transitions in self.transitions[state].items()} for state in self.transitions})
+		# completeAutomata.transitions.update({state: {symbol: transitions.copy() for symbol, transitions in self.transitions[state].items()} for state in self.transitions})
+
+		completeAutomata.transitions = deepcopy(self.transitions)
+		completeAutomata.addNewState("P")
+
+		print(completeAutomata.states)
 
 		for state in completeAutomata.states:
-			if state != "P":
-				for symbol in completeAutomata.symbols:
-					if not completeAutomata.transitions[state].get(symbol):
-						completeAutomata.addTransition(state, symbol, "P")
+			# if state != "P":
+			for symbol in completeAutomata.symbols:
+				if not completeAutomata.transitions[state].get(symbol):
+					completeAutomata.addTransition(state, symbol, "P")
+
 
 		return completeAutomata
 
