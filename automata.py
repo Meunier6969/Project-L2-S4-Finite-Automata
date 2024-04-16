@@ -159,7 +159,7 @@ class Automata:
 
 		completeAutomata = Automata(
 			len(self.symbols),
-			len(self.states) + 1,
+			len(self.states),
 			self.initial_state,
 			self.final_state
 		)
