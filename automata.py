@@ -48,9 +48,9 @@ class Automata:
 
 	def displayTransition(self) -> None:
 		# Top row
-		print(f"{' ':14}", end="")
+		print(f"{' ':13}", end="")
 		for char in self.symbols:
-			print(f"{char:10}", end="")
+			print(f"{char:12}", end="")
 		print()
 
 		# Main table
@@ -139,6 +139,14 @@ class Automata:
 		standardized.transitions = standardized.initTransitions() # Add "I" to the list of transition, might be better to add a function to do that
 
 		return standardized
+		standardAutomata = Automata(
+			len(self.symbols), 
+			self.states + 1,
+			[self.states],
+			self.final_state
+		)
+
+		standardAutomata.display()
 
 	def determinization(self) -> "Automata":
 		if self.isDeterministic():
@@ -148,15 +156,29 @@ class Automata:
 	def completion(self) -> "Automata":
 		if self.isComplete():
 			return self
-		
-		# créer nouveau automate state "poubelle"
 
-		for i, state in enumerate(self.transitions):
-			for symbol in self.symbols:
-				pass
-				# si rien -> poubelle
-		
-		# return
+		completeAutomata = Automata(
+			len(self.symbols),
+			len(self.states),
+			self.initial_state,
+			self.final_state
+		)
+
+		completeAutomata.states.append("P")
+
+		completeAutomata.transitions["P"] = {symbol: ["P"] for symbol in completeAutomata.symbols}
+
+		completeAutomata.transitions.update({state: {symbol: transitions.copy() for symbol, transitions in self.transitions[state].items()} for state in self.transitions})
+
+		for state in completeAutomata.states:
+			if state != "P":
+				for symbol in completeAutomata.symbols:
+					if not completeAutomata.transitions[state].get(symbol):
+						completeAutomata.addTransition(state, symbol, "P")
+
+		return completeAutomata
+
+
 
 	def determinizationAndCompletion(self) -> "Automata":
 		if self.isDeterministic() and self.isComplete():
