@@ -18,6 +18,18 @@ class Automata:
 		self.final_state = f_sta
 		self.transitions = self.initTransitions()
 
+	def copy(self) -> "Automata":
+		copied = Automata(
+			len(self.symbols),
+			len(self.states),
+			deepcopy(self.initial_state),
+			deepcopy(self.final_state)
+		)
+
+		copied.transitions = deepcopy(self.transitions)
+
+		return copied
+
 	def initSymbols(self, numberOfSymbol: int) -> list[str]:
 		return [chr(i+97) for i in range(numberOfSymbol)]
 
@@ -128,26 +140,26 @@ class Automata:
 	def standardization(self) -> "Automata":
 		if self.isStandard():
 			return self
+		
+		standard = self.copy()
+		standard.addNewState("I")
 
-		standardized = Automata(
-			len(self.symbols),
-			len(self.states) + 1,
-			["I"],
-			deepcopy(self.final_state)
-		)
+		# Check if the new state I should be a final state
+		if any([i in self.final_state for i in self.initial_state]):
+			standard.final_state.append("I")
 
-		standardized.states[-1] = "I"
-		standardized.transitions = standardized.initTransitions() # Add "I" to the list of transition, might be better to add a function to do that
+		newtransitions = {C:[] for C in self.symbols}
 
-		return standardized
-		standardAutomata = Automata(
-			len(self.symbols), 
-			self.states + 1,
-			[self.states],
-			self.final_state
-		)
+		for symbol in self.symbols:
+			temp = []
+			for initstate in self.initial_state:
+				temp += self.transitions[initstate][symbol]
+			newtransitions[symbol] = sorted(list(set(temp)))
 
-		standardAutomata.display()
+		standard.transitions["I"] = newtransitions
+		standard.initial_state = ["I"]
+
+		return standard
 
 	def determinization(self) -> "Automata":
 		if self.isDeterministic():
@@ -158,26 +170,11 @@ class Automata:
 		if self.isComplete():
 			return self
 
-		completeAutomata = Automata(
-			len(self.symbols),
-			len(self.states),
-			self.initial_state,
-			self.final_state
-		)
+		completeAutomata = self.copy()
 
-		# completeAutomata.states.append("P")
-
-		# completeAutomata.transitions["P"] = {symbol: ["P"] for symbol in completeAutomata.symbols}
-
-		# completeAutomata.transitions.update({state: {symbol: transitions.copy() for symbol, transitions in self.transitions[state].items()} for state in self.transitions})
-
-		completeAutomata.transitions = deepcopy(self.transitions)
 		completeAutomata.addNewState("P")
 
-		print(completeAutomata.states)
-
 		for state in completeAutomata.states:
-			# if state != "P":
 			for symbol in completeAutomata.symbols:
 				if not completeAutomata.transitions[state].get(symbol):
 					completeAutomata.addTransition(state, symbol, "P")
@@ -191,7 +188,7 @@ class Automata:
 		if self.isDeterministic() and self.isComplete():
 			return self
 
-		cdfa = self
+		cdfa = self.copy()
 
 		if not cdfa.isDeterministic():
 			cdfa = cdfa.determinization()
@@ -203,15 +200,8 @@ class Automata:
 
 
 	def complementary(self) -> "Automata":
-		complementaryAutomata = Automata(
-			len(self.symbols), 
-			len(self.states),
-			self.initial_state,
-			# self.states - self.final_state
-			[state for state in self.states if state not in self.final_state]
-		)
-
-		complementaryAutomata.transitions = self.transitions
+		complementaryAutomata = self.copy()
+		complementaryAutomata.final_state = [state for state in self.states if state not in self.final_state]
 
 		return complementaryAutomata
 
