@@ -1,0 +1,9 @@
+## The following requirements were added by pip freeze:
+
+pycodestyle>=2.3.1
+pytest>=2.8.7
+six
+mock
+ansiwrap
+sphinxcontrib-napoleon
+wheel
