@@ -1,4 +1,5 @@
 from automata import Automata, parseAutomataFromFile
+import msvcrt
 
 def debug():
 	# auto: Automata = parseAutomataFromFile("machines/example_automata.txt")
@@ -55,15 +56,17 @@ def main():
 
 					case "3":
 						print("Nothing here yet. Will need a way to check if there is even anything")
+						return
 					
 				run2 = True
 				while run2 == True :
-					print("--- You have choosen an automata. What do you wish to with it ?\n1.Display\n2.Check\n3.Standardization\n4.Determinization\n5.Completion\n6.Minimize\n7.Complementary\n8.Quit")
+					print("--- You have choosen an automata. What do you wish to with it ? ---\n1.Display\n2.Check\n3.Standardization\n4.Determinization\n5.Completion\n6.Minimize\n7.Complementary\n8.Quit")
 					inp5 = input("-> ")
 					match inp5 :
 						case "1" :
 							print("--- You choose to Display ---")
 							auto.display()
+							msvcrt.getch() #No idea if this works in Linux, check it yuiko
 						case "2" :
 							print("--- You choose to Check ---")
 							print("-> Is it Standard ?")
@@ -72,32 +75,41 @@ def main():
 							auto.isDeterministic(True)
 							print("-> Is it Complete ?")
 							auto.isComplete(True)
+							msvcrt.getch()
 						case "3" :
 							print("--- You choose to Standardize the automata ---")
 							if auto.isStandard() == True :
 								print("This automata is actually already Standard")
+								msvcrt.getch()
 							else :
 								newAuto = auto.standardization()
 								newAuto.display()
+								msvcrt.getch()
 						case "4" :
 							print("--- You choose to Determinize the automata ---")
 							if auto.isDeterministic() == True :
 								print("This automata is actually already Deterministic")
+								msvcrt.getch()
 							else :
 								print("Not implemented yet, sorry")
+								msvcrt.getch()
 						case "5" : #Are there more checks to do ? I will need to rewatch the lesson I think
 							print("--- You choose to Complete the automata ---")
 							if auto.isComplete() == True :
 								print("This automata is actually already Complete")
+								msvcrt.getch()
 							else :
 								newAuto = auto.completion()
 								newAuto.display()
+								msvcrt.getch()
 						case "6" : #Could be read word or Minimize here
 							print("--- You choose to Minimize the automata ---\nI don't think it will happen on this version")
+							msvcrt.getch()
 						case "7" :
 							print("--- You choose to make the Complementary of the automata ---")
 							newAuto = auto.complementary()
 							newAuto.display()
+							msvcrt.getch()
 						case "8" :
 							run2 = False
 			case "2":
