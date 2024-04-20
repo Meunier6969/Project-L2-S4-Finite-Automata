@@ -26,7 +26,7 @@ def main():
 	run1 = True
 	while run1 == True :
 		os.system("cls")
-		print("--- Efrei Finite Automata Project ---\nPress :\n1.Choose an automaton\n2.Quit")
+		print("--- Efrei Finite Automata Project ---\nPress :\n1.Choose an automaton\n0.Quit")
 		inp1 = input("-> ")
 		match inp1:
 			case "1":
@@ -65,7 +65,7 @@ def main():
 				run2 = True
 				while run2 == True :
 					os.system("cls")
-					print("--- You have choosen an automata. What do you wish to with it ? ---\n1.Display\n2.Check\n3.Standardization\n4.Determinization\n5.Completion\n6.Minimize\n7.Complementary\n8.Quit")
+					print("--- You have choosen an automata. What do you wish to with it ? ---\n1.Display\n2.Check\n3.Standardization\n4.Determinization\n5.Completion\n6.Minimize\n7.Complementary\n0.Quit")
 					inp5 = input("-> ")
 					match inp5 :
 						case "1" :
@@ -122,9 +122,9 @@ def main():
 							newAuto = auto.complementary()
 							newAuto.display()
 							msvcrt.getch()
-						case "8" :
+						case "0" :
 							run2 = False
-			case "2":
+			case "0":
 				return
 		
 if __name__=="__main__":
