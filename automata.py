@@ -10,12 +10,19 @@ class Automata:
 	# ['State']['Symbol'] -> [Transition]
 	transitions: dict[dict[list]] = {}
 		
-	def __init__(self, sym: int, sta: int, i_sta: list[str], f_sta: list[str]) -> None:
+	asyncronous: bool = False
+
+	def __init__(self, sym: int, sta: int, i_sta: list[str], f_sta: list[str], asyncronous:bool = False) -> None:
 		# print(f"Initializing Automata : {self}...")
 		self.symbols = self.initSymbols(sym)
 		self.states = self.initState(sta)
 		self.initial_state = i_sta
 		self.final_state = f_sta
+
+		self.asyncronous = asyncronous
+		if asyncronous:
+			self.symbols.append("E")
+
 		self.transitions = self.initTransitions()
 
 	def copy(self) -> "Automata":
@@ -39,6 +46,7 @@ class Automata:
 	def initTransitions(self) -> dict[dict[list]]:
 		return {state:{C:[] for C in self.symbols} for state in self.states}
 
+
 	def addTransition(self, state: str, symbol: str, transition: str) -> None:
 		if symbol not in self.symbols:
 			print(f"Symbol {symbol} not in FA.")
@@ -58,6 +66,7 @@ class Automata:
 	def addNewState(self, newState: str) -> None:
 		self.states.append(newState)
 		self.transitions.update({newState:{C:[] for C in self.symbols}})
+
 
 	def displayTransition(self) -> None:
 		# Top row
@@ -92,6 +101,9 @@ class Automata:
 		print("Transitions : ")
 		self.displayTransition()
 
+
+	def isAsyncronous(self, verbose:bool = False) -> bool:
+		return self.asyncronous
 
 	def isStandard(self, verbose:bool = False) -> bool:
 		if len(self.initial_state) != 1:
@@ -217,38 +229,47 @@ def parseAutomataFromFile(path: str) -> Automata:
 		print(e)
 		return None
 
+	file = file.readlines()
+
 	# Number of symbols
-	nosym = file.readline()
-	nosym = int(nosym)
+	nosym = int(file[0])
 	
 	# Number of states
-	nosta = file.readline()
-	nosta = int(nosta)
+	nosta = int(file[1])
 	
 	# Initial states
-	insta = file.readline().split(' ')
+	insta = file[2].split(' ')
 	insta.pop(0)
 	if len(insta) != 0:
 		insta[-1] = insta[-1].removesuffix('\n')
 
 	# Final states
-	fista = file.readline().split(' ')
+	fista = file[3].split(' ')
 	fista.pop(0)
 	if len(fista) != 0:
 		fista[-1] = fista[-1].removesuffix('\n')
 
-	newAutomata =  Automata(nosym, nosta, insta, fista)
+	# Checking if automata is asyncronous
+	asyncronous = False
+	for transition in file[5:]:
+		if "E" in transition: asyncronous = True
+
+	newAutomata =  Automata(nosym, nosta, insta, fista, asyncronous)
 
 	# Number of transitions
-	file.readline() # We can ignore this line
+	# We can ignore this line
 
 	# Transitions
-	transitions = file.readlines()
-	# transitions = [trans.removesuffix('\n') for trans in transitions]
-
-	# Assuming state, character and transition is one character each
-	for trans in transitions:
-		trans = regexSplit("(\d+)", trans)[1:]
+	for trans in file[5:]:
+		trans = parseTransition(trans)
 		newAutomata.addTransition(trans[0], trans[1], trans[2])
 		
 	return newAutomata
+
+def parseTransition(transition: str) -> list:
+
+	i = 0
+	while transition[i] not in "abcdefghijklmnopqrstuvwxyzE":
+		i += 1
+
+	return [transition[:i], transition[i], transition[i+1:].removesuffix('\n')]
