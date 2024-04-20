@@ -7,7 +7,7 @@ class Automata:
 	states: list[str] = []
 	initial_state: list[str] = []
 	final_state: list[str] = []
-	# [State]['Symbol'] -> [Transition]
+	# ['State']['Symbol'] -> [Transition]
 	transitions: dict[dict[list]] = {}
 		
 	def __init__(self, sym: int, sta: int, i_sta: list[str], f_sta: list[str]) -> None:
@@ -205,6 +205,9 @@ class Automata:
 
 		return complementaryAutomata
 
+	def read():
+		pass
+
 
 def parseAutomataFromFile(path: str) -> Automata:
 	try:
@@ -224,12 +227,14 @@ def parseAutomataFromFile(path: str) -> Automata:
 	# Initial states
 	insta = file.readline().split(' ')
 	insta.pop(0)
-	insta[-1] = insta[-1].removesuffix('\n')
+	if len(insta) != 0:
+		insta[-1] = insta[-1].removesuffix('\n')
 
 	# Final states
 	fista = file.readline().split(' ')
 	fista.pop(0)
-	fista[-1] = fista[-1].removesuffix('\n')
+	if len(fista) != 0:
+		fista[-1] = fista[-1].removesuffix('\n')
 
 	newAutomata =  Automata(nosym, nosta, insta, fista)
 
