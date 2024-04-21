@@ -126,7 +126,7 @@ def main():
 							etc = input("Press to continue -> ")
 						case "8" : #Read Word
 							os.system("cls")
-							print("--- You choose to Read a Word. This is not implemented. Kindly fu**-off ---")
+							print("--- You choose to Read a Word. This is not implemented ---")
 						case "0" : #Return to previous menu
 							run2 = False
 			case "0": #To quit the whole program.
