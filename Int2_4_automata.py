@@ -295,8 +295,8 @@ class Automata:
 
 		return complementaryAutomata
 
-	#[readWord] => Reads the word from a word
-	def readWord(self, word: str) -> bool:
+	#[readWord] => Return if a word can be read or not by the automata
+	def readWord(self, word: str, verbose: bool) -> bool:
 		if not self.isDeterministic():
 			if verbose: print("Can't read word: FA is not deterministic")
 			return False

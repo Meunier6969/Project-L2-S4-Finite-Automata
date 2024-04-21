@@ -127,12 +127,15 @@ def main():
 							etc = input("Press to continue -> ")
 						case "8" : #Read Word
 							os.system("cls")
-							print("--- You choose to Read a Word. This is not implemented ---")
+							print("--- You choose to Read a Word. ---")
+							str = input("Enter a string -> ")
+							auto.readWord(str, True)
+							etc = input("Press to continue -> ")
 						case "0" : #Return to previous menu
 							run2 = False
 			case "0": #To quit the whole program.
 				return
 		
 if __name__=="__main__": 
-	# main()
-	debug()
+	main()
+	# debug()
