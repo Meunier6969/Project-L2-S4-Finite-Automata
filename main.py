@@ -2,20 +2,21 @@ from automata import Automata, parseAutomataFromFile
 import os
 
 def debug():
-	auto: Automata = parseAutomataFromFile("machines/example_automata.txt")
+	# auto: Automata = parseAutomataFromFile("machines/example_automata.txt")
 	# auto: Automata = parseAutomataFromFile("machines/test_automata.txt")
 	# auto: Automata = parseAutomataFromFile("machines/deterministic_automata.txt")
 	# auto: Automata = parseAutomataFromFile("machines/complete_automata.txt")
 	# auto: Automata = parseAutomataFromFile("machines/standard_automata.txt")
-	# auto: Automata = parseAutomataFromFile("machines/given/automata_29.txt")
+	# auto: Automata = parseAutomataFromFile("machines/given/automata_44.txt")
 	# auto: Automata = parseAutomataFromFile("machines/nondeter_automata.txt")
+	auto: Automata = parseAutomataFromFile("machines/epsilon_automata.txt")
 
 	# auto.standardization().display()
 	auto.display()
-	auto.isDeterministic(True)
+	# auto.isDeterministic(True)
 
 	print("=== NEW AUTOMATA ===")
-	newauto = auto.determinizationAndCompletion()
+	newauto = auto.determinizationAsyncronous()
 	newauto.display()
 
 def main():
