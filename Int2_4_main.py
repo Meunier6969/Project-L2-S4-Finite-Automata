@@ -1,4 +1,4 @@
-from automata import Automata, parseAutomataFromFile
+from Int2_4_automata import Automata, parseAutomataFromFile
 import os
 
 def debug():
@@ -66,7 +66,7 @@ def main():
 				run2 = True
 				while run2 == True :
 					os.system("cls")
-					print("--- You have choosen an automata. What do you wish to with it ? ---\n1.Display\n2.Check\n3.Standardization\n4.Determinization\n5.Completion\n6.Minimize\n7.Complementary\n0.Quit")
+					print("--- You have choosen an automata. What do you wish to with it ? ---\n1.Display\n2.Check\n3.Standardization\n4.Determinization\n5.Completion\n6.Minimize\n7.Complementary\n0.Return")
 					inp5 = input("-> ")
 					match inp5 :
 						case "1" :
