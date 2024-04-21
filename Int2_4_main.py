@@ -16,12 +16,13 @@ def debug():
 	auto.isDeterministic(True)
 
 	print("=== READING ===")
-	
-	word = ""
-	while word != "end":
+
+	while 1:
 		word = input("> ")
-		if auto.readWord(word): print(word, "is in FA")
-		else: print(word, "is not in FA")
+		if word == "end": 
+			break
+
+		auto.readWord(word, True)
 
 def main():
 	#First main menu -> Choose to : 1.Choose an Automaton, 0.quit

@@ -287,15 +287,31 @@ class Automata:
 
 		return complementaryAutomata
 
-	def readWord(self, word: str) -> bool:
+	def readWord(self, word: str, verbose: bool = False) -> bool:
 		if not self.isDeterministic():
-			print("Can't read word: FA is not deterministic")
+			if verbose: print("Can't read word: FA is not deterministic")
 			return False
 
 		currentstate = self.initial_state[0]
 
-		for current in word:
-			print(current)
+		for currentletter in word:
+			if currentletter not in self.symbols:
+				if verbose: print(f"Can't read word: {currentletter} not in the symbols")
+				return False
+			# check is current state has transition with current letter
+			if self.transitions[currentstate][currentletter] != []:
+				currentstate = self.transitions[currentstate][currentletter][0]
+				continue
+			else:
+				if verbose: print(f"{word} not recognized: state {currentstate} doesn't have a transition with {currentletter}")
+				return False
+			
+		if currentstate in self.final_state:
+			if verbose: print(f"{word} recognized")
+			return True
+		else:
+			if verbose: print(f"{word} not recognized: last reached state {currentstate} isn't final")
+			return False
 
 
 def parseAutomataFromFile(path: str) -> Automata:
