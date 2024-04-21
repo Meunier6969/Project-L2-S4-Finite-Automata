@@ -184,64 +184,25 @@ class Automata:
 		return standard
 
 	def determinization(self) -> "Automata":
-		if self.isDeterministic():
-			return self
-
+		# Removing the "E" symbol if present
 		if self.isAsyncronous():
-			return self.determinizationAsyncronous()
+			deter = Automata(len(self.symbols) - 1, 0, [], [])
 		else:
-			return self.determinizationSyncronous()
-
-	def determinizationSyncronous(self) -> "Automata":
-		deter = Automata(len(self.symbols), 0, [], [])
-
-		# Combine the initial states
-		deter.addNewState(mergeSortList(self.initial_state))
-		deter.initial_state = [mergeSortList(self.initial_state)]
-
-		queue = [deter.initial_state[0]]
-
-		while queue:
-			current = queue.pop(0)
-			isfinal = False
-
-			for sym in deter.symbols:
-				newtransition = []
-				
-				for c in current: # Get each transition from the original automata
-					newtransition += self.transitions[c][sym]
-					if c in self.final_state:
-						isfinal = True
-
-				if newtransition == []:
-					continue
-
-				newtransition = mergeSortList(removeDuplicate(newtransition))
-
-				if isfinal and current not in deter.final_state:
-					deter.final_state.append(current)
-
-				if newtransition not in deter.states:
-					deter.addNewState(newtransition)
-					queue.append(newtransition)
-
-				deter.addTransition(current, sym, newtransition)
-
-		return deter
-
-	def determinizationAsyncronous(self) -> "Automata":
-		# When using this function, we have already checked the the automata is standard
-		deter = Automata(len(self.symbols) - 1, 0, [], [])
+			deter = Automata(len(self.symbols), 0, [], [])
 
 		# Find epsilon-closure
 		epsilonclosure = {}
 		for state in self.states:
 			epsilonclosure.update({state: self.findEpsilonClosure(state)})
 
-		initstate = epsilonclosure[self.initial_state[0]]
+		initstate = []
+		for init in self.initial_state:
+			initstate += epsilonclosure[init]
+
+		initstate = mergeSortList(initstate)
 		
-		deter.addNewState(mergeSortList(initstate))
-		deter.initial_state = [mergeSortList(initstate)]
+		deter.addNewState(initstate)
+		deter.initial_state = [initstate]
 
 		queue = [deter.initial_state[0]]
 
@@ -255,15 +216,16 @@ class Automata:
 				for c in current: # Get each transition from the original automata
 					for smth in self.transitions[c][sym]:
 						newtransition += epsilonclosure[smth]
+					if c in self.final_state:
+						isfinal = True
 
 				if newtransition == []:
 					continue
 
 				newtransition = mergeSortList(removeDuplicate(newtransition))
 					
-				# is final
-				if isfinal:
-					pass
+				if isfinal and current not in deter.final_state:
+					deter.final_state.append(current)
 
 				if newtransition not in deter.states:
 					deter.addNewState(newtransition)
@@ -272,6 +234,7 @@ class Automata:
 				deter.addTransition(current, sym, newtransition)
 
 		return deter
+
 
 	def completion(self) -> "Automata":
 		if self.isComplete():
@@ -305,13 +268,16 @@ class Automata:
 
 
 	def findEpsilonClosure(self, state: str) -> list:
+		if not self.isAsyncronous():
+			return [state]
+		
 		epsilonclosure = []
 		queue = [state]
 
 		while queue:
 			current = queue.pop(0)
 			epsilonclosure.append(current)
-			for temp in self.transitions[current]['E']:
+			for temp in self.transitions[current].get('E'):
 				queue.append(temp)
 
 		return sorted(epsilonclosure)

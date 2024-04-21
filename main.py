@@ -16,7 +16,7 @@ def debug():
 	# auto.isDeterministic(True)
 
 	print("=== NEW AUTOMATA ===")
-	newauto = auto.determinizationAsyncronous()
+	newauto = auto.determinization()
 	newauto.display()
 
 def main():
