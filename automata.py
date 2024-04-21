@@ -27,12 +27,14 @@ class Automata:
 
 	def copy(self) -> "Automata":
 		copied = Automata(
-			len(self.symbols),
-			len(self.states),
+			0,
+			0,
 			deepcopy(self.initial_state),
 			deepcopy(self.final_state)
 		)
 
+		copied.symbols = deepcopy(self.symbols)
+		copied.states = deepcopy(self.states)
 		copied.transitions = deepcopy(self.transitions)
 
 		return copied
@@ -187,12 +189,10 @@ class Automata:
 		deter.addNewState(mergeSortList(self.initial_state))
 		deter.initial_state = [mergeSortList(self.initial_state)]
 
-
 		queue = [deter.initial_state[0]]
 
 		while queue:
 			current = queue.pop(0)
-
 			isfinal = False
 
 			for sym in deter.symbols:
@@ -217,7 +217,6 @@ class Automata:
 
 				deter.addTransition(current, sym, mergeSortList(newtransition))
 
-
 		return deter
 
 	def completion(self) -> "Automata":
@@ -230,9 +229,8 @@ class Automata:
 
 		for state in completeAutomata.states:
 			for symbol in completeAutomata.symbols:
-				if not completeAutomata.transitions[state].get(symbol):
+				if completeAutomata.transitions[state][symbol] == []:
 					completeAutomata.addTransition(state, symbol, "P")
-
 
 		return completeAutomata
 
