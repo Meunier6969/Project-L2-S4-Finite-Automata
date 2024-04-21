@@ -65,7 +65,7 @@ def main():
 				run2 = True
 				while run2 == True :
 					os.system("cls")
-					print("--- You have choosen an automata. What do you wish to with it ? ---\n1.Display\n2.Check\n3.Standardization\n4.Determinization\n5.Completion\n6.Minimize\n7.Complementary\n0.Return")
+					print("--- You have choosen an automata. What do you wish to with it ? ---\n1.Display\n2.Check\n3.Standardization\n4.Determinization\n5.Completion\n6.Minimize\n7.Complementary\n8.Read Word\n0.Return")
 					inp5 = input("-> ")
 					match inp5 :
 						case "1" :
@@ -115,6 +115,9 @@ def main():
 							newAuto = auto.complementary()
 							newAuto.display()
 							etc = input("Press to continue -> ")
+						case "8" :
+							os.system("cls")
+							print("--- You choose to Read a Word. This is not implemented. Kindly fu**-off ---")
 						case "0" :
 							run2 = False
 			case "0":
