@@ -20,7 +20,6 @@ def debug():
 	newauto.display()
 
 def main():
-	debug(); return
 	#Choose to : 1.Choose an Automaton, 2.quit
 	#If 1 : To choose an automaton from the test automaton, the given automaton, or the newly created automatons
 	#Tell how many .txt there is in the choosen folder. If there are none, it will go back to the previous screen to choose a folder
@@ -73,15 +72,12 @@ def main():
 							os.system("cls")
 							print("--- You choose to Display ---")
 							auto.display()
+							etc = input("Press to continue -> ")
 						case "2" :
 							os.system("cls")
 							print("--- You choose to Check ---")
-							print("-> Is it Standard ?")
-							auto.isStandard(True)
-							print("-> Is it Deterministic ?")
-							auto.isDeterministic(True)
-							print("-> Is it Complete ?")
 							auto.isComplete(True)
+							etc = input("Press to continue -> ")
 						case "3" :
 							os.system("cls")
 							print("--- You choose to Standardize the automata ---")
@@ -90,13 +86,16 @@ def main():
 							else :
 								newAuto = auto.standardization()
 								newAuto.display()
+							etc = input("Press to continue -> ")
 						case "4" :
 							os.system("cls")
 							print("--- You choose to Determinize the automata ---")
 							if auto.isDeterministic() == True :
 								print("This automata is actually already Deterministic")
 							else :
-								print("Not implemented yet, sorry")
+								newAuto = auto.determinization()
+								newAuto.display()
+							etc = input("Press to continue -> ")
 						case "5" : #Are there more checks to do ? I will need to rewatch the lesson I think
 							os.system("cls")
 							print("--- You choose to Complete the automata ---")
@@ -105,14 +104,17 @@ def main():
 							else :
 								newAuto = auto.completion()
 								newAuto.display()
+							etc = input("Press to continue -> ")
 						case "6" : #Could be read word or Minimize here
 							os.system("cls")
 							print("--- You choose to Minimize the automata ---\nI don't think it will happen on this version")
+							etc = input("Press to continue -> ")
 						case "7" :
 							os.system("cls")
 							print("--- You choose to make the Complementary of the automata ---")
 							newAuto = auto.complementary()
 							newAuto.display()
+							etc = input("Press to continue -> ")
 						case "0" :
 							run2 = False
 			case "0":
