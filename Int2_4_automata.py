@@ -47,10 +47,11 @@ class Automata:
 	def initState(self, numberOfState: int) -> list[str]:
 		return [str(i) for i in range(numberOfState)]
 
+	#[initTransitions] => Initialise the transitions
 	def initTransitions(self) -> dict[dict[list]]:
 		return {state:{C:[] for C in self.symbols} for state in self.states}
 
-
+	#[addTransition] => Used to create a transition
 	def addTransition(self, state: str, symbol: str, transition: str) -> None:
 		if symbol not in self.symbols:
 			print(f"Symbol {symbol} not in FA.")
@@ -67,11 +68,12 @@ class Automata:
 		if transition not in self.transitions[state][symbol]:
 			self.transitions[state][symbol].append(transition)
 
+	#[addNewState] => As the name suggests, creates a new state
 	def addNewState(self, newState: str) -> None:
 		self.states.append(newState)
 		self.transitions.update({newState:{C:[] for C in self.symbols}})
 
-
+	#[displayTransition] => Display the table of symbols and transitions
 	def displayTransition(self) -> None:
 		# Top row
 		print(f"{' ':13}", end="")
@@ -97,6 +99,7 @@ class Automata:
 					print(f"{str( mergeSortList(transition.get(sym), ',') ):<10}", end="")
 			print()
 
+	#[display] => Display the basic informations about the automata and it's transition table.
 	def display(self) -> None:
 		print("Symbols : ", *self.symbols)
 		print("States : ", self.states)
@@ -105,13 +108,14 @@ class Automata:
 		print("Transitions : ")
 		self.displayTransition()
 
-
+	#[isAsyncronous] => To know if the automata contains an epsilon or not
 	def isAsyncronous(self, verbose:bool = False) -> bool:
 		if verbose:
 			if self.asyncronous: print("FA is asyncronous: FA contain epsilon")
 			if not self.asyncronous: print("FA is syncronous: FA doesn't contain epsilon")
 		return self.asyncronous
 
+	#[isStandard] => Checks if the automata is Standard
 	def isStandard(self, verbose:bool = False) -> bool:
 		if len(self.initial_state) != 1:
 			if verbose: print(f"FA is not standard :\nFA contains multiples initial states : {self.initial_state}")
@@ -128,6 +132,7 @@ class Automata:
 		if verbose: print("FA is standard")
 		return True
 
+	#[isDeterministic] => Checks if the automata is Deterministic
 	def isDeterministic(self, verbose:bool = False) -> bool:
 		if len(self.initial_state) != 1:
 			if verbose: print(f"FA is not deterministic :\nFA contains multiples initial states : {self.initial_state}")
@@ -142,6 +147,7 @@ class Automata:
 		if verbose: print("FA is deterministic")
 		return True
 
+	#[isComplete] => Checks if the automata is Complete
 	def isComplete(self, verbose:bool = False) -> bool:
 		if not self.isDeterministic(verbose):
 			if verbose: print("FA is not complete : FA is not deterministic")
@@ -156,7 +162,7 @@ class Automata:
 		if verbose: print("FA is complete")
 		return True
 
-
+	#[standardization] => Standardize the automata
 	def standardization(self) -> "Automata":
 		if self.isStandard():
 			return self
@@ -181,6 +187,7 @@ class Automata:
 
 		return standard
 
+	#[determinization] => Determinize the automata
 	def determinization(self) -> "Automata":
 		# Removing the "E" symbol if present
 		if self.isAsyncronous():
@@ -233,15 +240,16 @@ class Automata:
 
 		return deter
 
-
+	#[completion] => Does the completion of the automata
 	def completion(self) -> "Automata":
 		if self.isComplete():
 			return self
 
+		#Copy the main automata and create the state P
 		completeAutomata = self.copy()
-
 		completeAutomata.addNewState("P")
 
+		#When a transition is empty, it adds P to fill the hole
 		for state in completeAutomata.states:
 			for symbol in completeAutomata.symbols:
 				if completeAutomata.transitions[state][symbol] == []:
@@ -249,7 +257,7 @@ class Automata:
 
 		return completeAutomata
 
-
+	#[determinizationAndCompletion] => As the name say
 	def determinizationAndCompletion(self) -> "Automata":
 		if self.isDeterministic() and self.isComplete():
 			return self
@@ -264,7 +272,7 @@ class Automata:
 
 		return cdfa
 
-
+	#[findEpsilonClosure] => Determine the epsilon closures
 	def findEpsilonClosure(self, state: str) -> list:
 		if not self.isAsyncronous():
 			return [state]
@@ -280,14 +288,15 @@ class Automata:
 
 		return sorted(epsilonclosure)
 
-
+	#[complementary] => Return the complementary of the automata
 	def complementary(self) -> "Automata":
 		complementaryAutomata = self.copy()
 		complementaryAutomata.final_state = [state for state in self.states if state not in self.final_state]
 
 		return complementaryAutomata
 
-	def readWord(self, word: str, verbose: bool = False) -> bool:
+	#[readWord] => Reads the word from a word
+	def readWord(self, word: str) -> bool:
 		if not self.isDeterministic():
 			if verbose: print("Can't read word: FA is not deterministic")
 			return False
@@ -313,7 +322,7 @@ class Automata:
 			if verbose: print(f"{word} not recognized: last reached state {currentstate} isn't final")
 			return False
 
-
+#[parseAutomataFromFile] => Makes it able to transcribe the automata in the .txt files to the automata class
 def parseAutomataFromFile(path: str) -> Automata:
 	try:
 		file = open(path, "r")
@@ -358,6 +367,7 @@ def parseAutomataFromFile(path: str) -> Automata:
 		
 	return newAutomata
 
+#[parseTransition] => Reads transition for the function above
 def parseTransition(transition: str) -> list:
 	i = 0
 	while transition[i] not in "abcdefghijklmnopqrstuvwxyzE":
@@ -365,10 +375,12 @@ def parseTransition(transition: str) -> list:
 
 	return [transition[:i], transition[i], transition[i+1:].removesuffix('\n')]
 
+#[mergeSortList] => Merge numbers together into one number
 def mergeSortList(transition: list, sep: str = '') -> str:
 	# ['0', '1', '2', '5'] => '0125'
 	transition = sorted(transition)
 	return sep.join(transition)
 
+#[removeDuplicate] => Removes the duplicates
 def removeDuplicate(transition: list):
 	return sorted(list(set(transition)))
