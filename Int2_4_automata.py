@@ -127,10 +127,6 @@ class Automata:
 		return True
 
 	def isDeterministic(self, verbose:bool = False) -> bool:
-		if not self.isStandard(verbose):
-			if verbose: print("FA is not deterministic : FA is not standard")
-			return False
-
 		if len(self.initial_state) != 1:
 			if verbose: print(f"FA is not deterministic :\nFA contains multiples initial states : {self.initial_state}")
 			return False
@@ -289,8 +285,15 @@ class Automata:
 
 		return complementaryAutomata
 
-	def read():
-		pass
+	def readWord(self, word: str) -> bool:
+		if not self.isDeterministic():
+			print("Can't read word: FA is not deterministic")
+			return False
+
+		currentstate = self.initial_state[0]
+
+		for current in word:
+			print(current)
 
 
 def parseAutomataFromFile(path: str) -> Automata:
