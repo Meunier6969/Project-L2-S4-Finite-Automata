@@ -26,7 +26,7 @@ def debug():
 
 def main():
 	#First main menu -> Choose to : 1.Choose an Automaton, 0.quit
-	#If 1 : To choose an automaton from the test automaton, the given automaton, or the newly created automatons
+	#If 1 : To choose an automaton from the test automaton or the given automaton
 
 	#Second main menu ->When an automaton is choosen : 1.Display, 2.Check, 3. Standardization, 4.Determinization, 5.Completion, 
 	#6.Minimize, 7.Complementary, 8.Read Word, 0.Go back
@@ -39,7 +39,7 @@ def main():
 		match inp1:
 			case "1":
 				os.system("cls")
-				print("--- To choose an automaton, please indicate which type of automaton you wish to use ---\n1.Test Automatons\n2.Given Automatons\n3.Newly Created Automatons")
+				print("--- To choose an automaton, please indicate which type of automaton you wish to use ---\n1.Test Automatons\n2.Given Automatons")
 				inp2 = input ("-> ")
 				match inp2:
 					case "1": #For choosing an automata that we use for debugging
@@ -65,9 +65,6 @@ def main():
 							print("Please enter the input")
 							inp4 = input("-> ")
 						auto: Automata = parseAutomataFromFile("machines/given/automata_"+inp4+".txt")
-					case "3":
-						print("Nothing here yet. Will need a way to check if there is even anything")
-						return
 				run2 = True
 				while run2 == True :
 					os.system("cls")
