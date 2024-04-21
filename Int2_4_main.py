@@ -107,8 +107,12 @@ def main():
 							if auto.isComplete() == True :
 								print("This automata is actually already Complete")
 							else :
-								newAuto = auto.completion()
-								newAuto.display()
+								if auto.isDeterministic() == False :
+									newAuto = auto.determinizationAndCompletion()
+									newAuto.display()
+								else :
+									newAuto = auto.completion()
+									newAuto.display()
 							etc = input("Press to continue -> ")
 						case "6" : #Minimize
 							os.system("cls")

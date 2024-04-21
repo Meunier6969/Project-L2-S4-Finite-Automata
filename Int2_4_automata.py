@@ -39,9 +39,11 @@ class Automata:
 
 		return copied
 
+	#[initSymbols] => Automatically define the characters from the number of symbols
 	def initSymbols(self, numberOfSymbol: int) -> list[str]:
 		return [chr(i+97) for i in range(numberOfSymbol)]
 
+	#[initState] => Automatically define the numbers from a number
 	def initState(self, numberOfState: int) -> list[str]:
 		return [str(i) for i in range(numberOfState)]
 
