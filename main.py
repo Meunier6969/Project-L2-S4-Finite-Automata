@@ -3,14 +3,19 @@ import os
 
 def debug():
 	# auto: Automata = parseAutomataFromFile("machines/example_automata.txt")
-	auto: Automata = parseAutomataFromFile("machines/test_automata.txt")
+	# auto: Automata = parseAutomataFromFile("machines/test_automata.txt")
 	# auto: Automata = parseAutomataFromFile("machines/deterministic_automata.txt")
 	# auto: Automata = parseAutomataFromFile("machines/complete_automata.txt")
 	# auto: Automata = parseAutomataFromFile("machines/standard_automata.txt")
-	# auto: Automata = parseAutomataFromFile("machines/given/automata_31.txt")
+	auto: Automata = parseAutomataFromFile("machines/given/automata_29.txt")
+	# auto: Automata = parseAutomataFromFile("machines/nondeter_automata.txt")
 
+	# auto.standardization().display()
 	auto.display()
 
+	print("=== NEW AUTOMATA ===")
+	newauto = auto.determinization()
+	newauto.display()
 
 def main():
 	debug(); return
