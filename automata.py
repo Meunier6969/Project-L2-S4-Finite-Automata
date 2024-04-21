@@ -9,7 +9,7 @@ class Automata:
 	final_state: list[str] = []
 	# ['State']['Symbol'] -> [Transition]
 	transitions: dict[dict[list]] = {}
-		
+
 	asyncronous: bool = False
 
 	def __init__(self, sym: int, sta: int, i_sta: list[str], f_sta: list[str], asyncronous:bool = False) -> None:
@@ -72,7 +72,7 @@ class Automata:
 		# Top row
 		print(f"{' ':13}", end="")
 		for char in self.symbols:
-			print(f"{char:12}", end="")
+			print(f"{char:10}", end="")
 		print()
 
 		# Main table
@@ -90,7 +90,7 @@ class Automata:
 				if transition.get(sym) in [None,[]]:
 					print(f"{'--':<10}", end="")
 				else:
-					print(f"{str( transition.get(sym) ):<10}", end="")
+					print(f"{str( mergeSortList(transition.get(sym), ',') ):<10}", end="")
 			print()
 
 	def display(self) -> None:
@@ -103,6 +103,9 @@ class Automata:
 
 
 	def isAsyncronous(self, verbose:bool = False) -> bool:
+		if verbose:
+			if self.asyncronous: print("FA is asyncronous: FA contain epsilon")
+			if not self.asyncronous: print("FA is syncronous: FA doesn't contain epsilon")
 		return self.asyncronous
 
 	def isStandard(self, verbose:bool = False) -> bool:
@@ -122,8 +125,8 @@ class Automata:
 		return True
 
 	def isDeterministic(self, verbose:bool = False) -> bool:
-		if not self.isStandard(verbose):
-			if verbose: print("FA is not deterministic : FA is not standard")
+		if len(self.initial_state) != 1:
+			if verbose: print(f"FA is not deterministic :\nFA contains multiples initial states : {self.initial_state}")
 			return False
 
 		for state, transition in self.transitions.items():
@@ -167,7 +170,7 @@ class Automata:
 			temp = []
 			for initstate in self.initial_state:
 				temp += self.transitions[initstate][symbol]
-			newtransitions[symbol] = sorted(list(set(temp)))
+			newtransitions[symbol] = removeDuplicate(temp)
 
 		standard.transitions["I"] = newtransitions
 		standard.initial_state = ["I"]
@@ -177,7 +180,45 @@ class Automata:
 	def determinization(self) -> "Automata":
 		if self.isDeterministic():
 			return self
-		pass 
+
+		deter = Automata(len(self.symbols), 0, [], [])
+
+		# Combine the initial states
+		deter.addNewState(mergeSortList(self.initial_state))
+		deter.initial_state = [mergeSortList(self.initial_state)]
+
+
+		queue = [deter.initial_state[0]]
+
+		while queue:
+			current = queue.pop(0)
+
+			isfinal = False
+
+			for sym in deter.symbols:
+				newtransition = []
+				
+				for c in current: # Get each transition from the original automata
+					newtransition += self.transitions[c][sym]
+					if c in self.final_state:
+						isfinal = True
+
+				if newtransition == []:
+					continue
+
+				newtransition = mergeSortList(removeDuplicate(newtransition))
+
+				if isfinal and current not in deter.final_state:
+					deter.final_state.append(current)
+
+				if newtransition not in deter.states:
+					deter.addNewState(newtransition)
+					queue.append(newtransition)
+
+				deter.addTransition(current, sym, mergeSortList(newtransition))
+
+
+		return deter
 
 	def completion(self) -> "Automata":
 		if self.isComplete():
@@ -267,9 +308,16 @@ def parseAutomataFromFile(path: str) -> Automata:
 	return newAutomata
 
 def parseTransition(transition: str) -> list:
-
 	i = 0
 	while transition[i] not in "abcdefghijklmnopqrstuvwxyzE":
 		i += 1
 
 	return [transition[:i], transition[i], transition[i+1:].removesuffix('\n')]
+
+def mergeSortList(transition: list, sep: str = '') -> str:
+	# ['0', '1', '2', '5'] => '0125'
+	transition = sorted(transition)
+	return sep.join(transition)
+
+def removeDuplicate(transition: list):
+	return sorted(list(set(transition)))

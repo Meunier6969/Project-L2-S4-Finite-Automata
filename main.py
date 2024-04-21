@@ -1,23 +1,19 @@
 from automata import Automata, parseAutomataFromFile
-import msvcrt
 import os
 
 def debug():
 	# auto: Automata = parseAutomataFromFile("machines/example_automata.txt")
-	# auto: Automata = parseAutomataFromFile("machines/test_automata.txt")
+	auto: Automata = parseAutomataFromFile("machines/test_automata.txt")
 	# auto: Automata = parseAutomataFromFile("machines/deterministic_automata.txt")
 	# auto: Automata = parseAutomataFromFile("machines/complete_automata.txt")
 	# auto: Automata = parseAutomataFromFile("machines/standard_automata.txt")
-	auto: Automata = parseAutomataFromFile("machines/given/automata_10.txt")
+	# auto: Automata = parseAutomataFromFile("machines/given/automata_31.txt")
 
 	auto.display()
 
-	newAuto = auto.standardization()
-
-	print("=== NEW AUTO ===")
-	newAuto.display()
 
 def main():
+	debug(); return
 	#Choose to : 1.Choose an Automaton, 2.quit
 	#If 1 : To choose an automaton from the test automaton, the given automaton, or the newly created automatons
 	#Tell how many .txt there is in the choosen folder. If there are none, it will go back to the previous screen to choose a folder
@@ -57,11 +53,9 @@ def main():
 							print("Please enter the input")
 							inp4 = input("-> ")
 						auto: Automata = parseAutomataFromFile("machines/given/automata_"+inp4+".txt")
-
 					case "3":
 						print("Nothing here yet. Will need a way to check if there is even anything")
 						return
-					
 				run2 = True
 				while run2 == True :
 					os.system("cls")
@@ -72,7 +66,6 @@ def main():
 							os.system("cls")
 							print("--- You choose to Display ---")
 							auto.display()
-							msvcrt.getch() #No idea if this works in Linux, check it yuiko
 						case "2" :
 							os.system("cls")
 							print("--- You choose to Check ---")
@@ -82,46 +75,37 @@ def main():
 							auto.isDeterministic(True)
 							print("-> Is it Complete ?")
 							auto.isComplete(True)
-							msvcrt.getch()
 						case "3" :
 							os.system("cls")
 							print("--- You choose to Standardize the automata ---")
 							if auto.isStandard() == True :
 								print("This automata is actually already Standard")
-								msvcrt.getch()
 							else :
 								newAuto = auto.standardization()
 								newAuto.display()
-								msvcrt.getch()
 						case "4" :
 							os.system("cls")
 							print("--- You choose to Determinize the automata ---")
 							if auto.isDeterministic() == True :
 								print("This automata is actually already Deterministic")
-								msvcrt.getch()
 							else :
 								print("Not implemented yet, sorry")
-								msvcrt.getch()
 						case "5" : #Are there more checks to do ? I will need to rewatch the lesson I think
 							os.system("cls")
 							print("--- You choose to Complete the automata ---")
 							if auto.isComplete() == True :
 								print("This automata is actually already Complete")
-								msvcrt.getch()
 							else :
 								newAuto = auto.completion()
 								newAuto.display()
-								msvcrt.getch()
 						case "6" : #Could be read word or Minimize here
 							os.system("cls")
 							print("--- You choose to Minimize the automata ---\nI don't think it will happen on this version")
-							msvcrt.getch()
 						case "7" :
 							os.system("cls")
 							print("--- You choose to make the Complementary of the automata ---")
 							newAuto = auto.complementary()
 							newAuto.display()
-							msvcrt.getch()
 						case "0" :
 							run2 = False
 			case "0":
