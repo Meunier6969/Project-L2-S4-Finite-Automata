@@ -284,7 +284,8 @@ class Automata:
 			current = queue.pop(0)
 			epsilonclosure.append(current)
 			for temp in self.transitions[current].get('E'):
-				queue.append(temp)
+				if temp not in epsilonclosure:
+					queue.append(temp)
 
 		return sorted(epsilonclosure)
 
